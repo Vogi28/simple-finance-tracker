@@ -5,12 +5,7 @@ import streamlit as st
 import time
 from Modules.TransactionHandler import TransactionHandler as th
 
-TRANSACTIONS_PATH = os.getcwd() + "/transactions/"
 CATEGORIES_FILE = os.getcwd() + "/categories.json"
-
-# Clear statement older that n days
-method_helper.clear_old_files(TRANSACTIONS_PATH, 60)
-
 
 # load data
 st.set_page_config(
@@ -24,14 +19,14 @@ session_handler = method_helper.initialize_state(CATEGORIES_FILE)
 def main():
     st.title("Finance Tracker Dashboard")
 
-    f = method_helper.sidebar_file_selector(TRANSACTIONS_PATH)
+    f = method_helper.sidebar_file_selector()
 
     uploaded_file = st.file_uploader(label="Upload your transaction file", type={"CSV"})
 
     if uploaded_file is not None or f is not None:
         tr_handler = th()
         if f is None:
-            method_helper.save_file(uploaded_file, TRANSACTIONS_PATH)
+            method_helper.save_file_in_session(uploaded_file)
 
         df = tr_handler.load_transactions(uploaded_file or f, session_handler)
 

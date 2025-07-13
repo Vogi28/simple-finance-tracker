@@ -24,28 +24,27 @@ def define_start_end_date(df: pd.DataFrame):
     return [start_date, end_date]
 
 
-def save_file(uploaded_file, path: str):
-    path = path + uploaded_file.name
-    if not os.path.exists(path):
-        f = open(path, "wb")
-        f.write(uploaded_file.getvalue())
+def save_file_in_session(uploaded_file):
+    if uploaded_file.name not in st.session_state.temp_files:
+        st.session_state.temp_files[uploaded_file.name] = uploaded_file
         st.rerun()
 
 
-def sidebar_file_selector(folder_path: str):
+def sidebar_file_selector():
     selected_file = None
-    if os.path.exists(folder_path):
-        files = os.listdir(folder_path)
+    if st.session_state.temp_files != {}:
+        # TODO find a solution to display name of the file
         selected_file = st.sidebar.selectbox(
-            "Previous files", files, index=None, placeholder=""
+            label="Temporary files",
+            options=list(st.session_state.temp_files.values()),
+            index=None,
+            placeholder="",
         )
-
-        if selected_file is not None:
-            selected_file = folder_path + selected_file
 
     return selected_file
 
 
+# Only for local saving
 def clear_old_files(TRANSACTIONS_PATH: str, n: int):
     if os.path.exists(TRANSACTIONS_PATH):
         files = os.listdir(TRANSACTIONS_PATH)
@@ -74,6 +73,9 @@ def add_new_category(
 def initialize_state(CATEGORIES_FILE) -> ssh:
     if "categories" not in st.session_state:
         st.session_state.categories = {"Uncategorized": []}
+
+    if "temp_files" not in st.session_state:
+        st.session_state.temp_files = {}
 
     if os.path.exists(CATEGORIES_FILE):
         with open(CATEGORIES_FILE, "r") as f:
