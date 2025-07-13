@@ -79,5 +79,12 @@ def initialize_state(CATEGORIES_FILE) -> ssh:
         with open(CATEGORIES_FILE, "r") as f:
             st.session_state.categories = json.load(f)
         session_handler = ssh(st.session_state.categories)
+    else:
+        with open(CATEGORIES_FILE, "x") as f:
+            f.write('{"Uncategorized": []}')
+
+        with open(CATEGORIES_FILE, "r") as f:
+            st.session_state.categories = json.load(f)
+        session_handler = ssh(st.session_state.categories)
 
     return session_handler
