@@ -4,7 +4,7 @@ from Modules.SessionStateHandler import SessionStateHandler
 
 
 class TransactionHandler:
-    @st.cache_data  # 👈 Add the caching decorator
+
     def load_transactions(_self, file, _handler: SessionStateHandler):
         try:
             df = pd.read_csv(file)
@@ -13,7 +13,6 @@ class TransactionHandler:
         except Exception as e:
             return f"Error processing file: {str(e)}"
 
-    @st.cache_data
     def categorize_transactions(_self, df: pd.DataFrame, _handler: SessionStateHandler):
         df["Category"] = "Uncategorized"
         for category, keywords in _handler.categories.items():
