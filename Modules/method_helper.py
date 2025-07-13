@@ -2,10 +2,9 @@ from datetime import datetime, timedelta
 import json
 import os
 import pandas as pd
-import streamlit as st
 from Modules.SessionStateHandler import SessionStateHandler as ssh
+import streamlit as st
 import time
-from Modules.TransactionHandler import TransactionHandler as th
 
 
 @st.cache_data
@@ -34,27 +33,30 @@ def save_file(uploaded_file, path: str):
 
 
 def sidebar_file_selector(folder_path: str):
-    files = os.listdir(folder_path)
-    selected_file = st.sidebar.selectbox(
-        "Previous files", files, index=None, placeholder=""
-    )
+    selected_file = None
+    if os.path.exists(folder_path):
+        files = os.listdir(folder_path)
+        selected_file = st.sidebar.selectbox(
+            "Previous files", files, index=None, placeholder=""
+        )
 
-    if selected_file is not None:
-        selected_file = folder_path + selected_file
+        if selected_file is not None:
+            selected_file = folder_path + selected_file
 
     return selected_file
 
 
 def clear_old_files(TRANSACTIONS_PATH: str, n: int):
-    files = os.listdir(TRANSACTIONS_PATH)
-    if files != []:
-        for file in files:
-            path = TRANSACTIONS_PATH + file
-            time_of_creation = time.ctime(os.path.getctime(path))
-            dateObj = datetime.strptime(time_of_creation, "%a %b %d %H:%M:%S %Y")
+    if os.path.exists(TRANSACTIONS_PATH):
+        files = os.listdir(TRANSACTIONS_PATH)
+        if files != []:
+            for file in files:
+                path = TRANSACTIONS_PATH + file
+                time_of_creation = time.ctime(os.path.getctime(path))
+                dateObj = datetime.strptime(time_of_creation, "%a %b %d %H:%M:%S %Y")
 
-            if (datetime.now() - dateObj) > timedelta(days=n):
-                os.remove(path)
+                if (datetime.now() - dateObj) > timedelta(days=n):
+                    os.remove(path)
 
 
 def add_new_category(
