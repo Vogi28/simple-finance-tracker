@@ -1,0 +1,15 @@
+[project]
+name = "automated-finance-tracker"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "langchain>=0.3.26",
+    "langchain-ollama>=0.3.4",
+    "numpy>=2.2.6",
+    "ollama>=0.5.1",
+    "pandas>=2.3.1",
+    "plotly>=6.2.0",
+    "streamlit>=1.46.1",
+]
