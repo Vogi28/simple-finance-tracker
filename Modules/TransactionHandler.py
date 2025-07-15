@@ -1,5 +1,4 @@
 import pandas as pd
-import streamlit as st
 from Modules.SessionStateHandler import SessionStateHandler
 
 
@@ -29,3 +28,13 @@ class TransactionHandler:
                         break
 
         return df
+
+    def merge_df(
+        _self, df1: pd.DataFrame, df2: pd.DataFrame, merge_on: str
+    ) -> pd.DataFrame:
+        return pd.merge(
+            df1,
+            df2,
+            on=merge_on,
+            suffixes=("_file1", "_file2"),
+        )

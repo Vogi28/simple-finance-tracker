@@ -9,15 +9,14 @@ CATEGORIES_FILE = os.getcwd() + "/categories.json"
 
 # load data
 st.set_page_config(
-    page_title="Finance Tracker",
-    layout="wide",
+    page_title="Finance Tracker", layout="wide", page_icon=":material/account_balance:"
 )
 
 session_handler = method_helper.initialize_state(CATEGORIES_FILE)
 
 
 def main():
-    st.title("Finance Tracker Dashboard")
+    st.title("Dashboard")
 
     f = method_helper.sidebar_file_selector()
 
