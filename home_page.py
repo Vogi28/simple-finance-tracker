@@ -2,7 +2,6 @@ import Modules.method_helper as method_helper
 import os
 import plotly.express as px
 import streamlit as st
-import time
 from Modules.TransactionHandler import TransactionHandler as th
 
 CATEGORIES_FILE = os.getcwd() + "/categories.json"
@@ -132,12 +131,6 @@ def main():
                 )
 
                 col2.plotly_chart(fig)
-
-                merchant_totals = (
-                    session_handler.debits_df.groupby("Merchant")["Amount"]
-                    .sum()
-                    .reset_index()
-                )
         st.session_state.categories = session_handler.categories
 
 
