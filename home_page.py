@@ -99,23 +99,20 @@ def main():
                             if session_handler.add_keyword_to_category(
                                 new_category, description, CATEGORIES_FILE
                             ):
-                                st.success("Changes applied")
-                                time.sleep(1)
-                                st.rerun()
+                                st.success(f"Changes applied for {description}")
 
                 st.subheader(
                     f"Expense summary from {start_date.strftime('%d/%m/%Y')} - {end_date.strftime('%d/%m/%Y')}",
                     divider=True,
                 )
                 col1, col2 = st.columns(2)
-                # col1.subheader(
-                #     f"Expense summary from {start_date.strftime('%d/%m/%Y')} - {end_date.strftime('%d/%m/%Y')}"
-                # )
+
                 category_totals = (
                     session_handler.debits_df.groupby("Category")["Amount"]
                     .sum()
                     .reset_index()
                 )
+
                 category_totals = category_totals.sort_values("Amount", ascending=False)
                 col1.dataframe(
                     category_totals,
@@ -127,25 +124,20 @@ def main():
                     use_container_width=True,
                     hide_index=True,
                 )
-                # st.dataframe(
-                #     category_totals,
-                #     column_config={
-                #         "Amount": st.column_config.NumberColumn(
-                #             "Amount", format="%.2f CHF"
-                #         )
-                #     },
-                #     use_container_width=True,
-                #     hide_index=True,
-                # )
 
                 fig = px.pie(
                     category_totals,
                     values="Amount",
                     names="Category",
                 )
-                # st.plotly_chart(fig)
+
                 col2.plotly_chart(fig)
 
+                merchant_totals = (
+                    session_handler.debits_df.groupby("Merchant")["Amount"]
+                    .sum()
+                    .reset_index()
+                )
         st.session_state.categories = session_handler.categories
 
 

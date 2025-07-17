@@ -24,8 +24,7 @@ class SessionStateHandler:
         keyword = keyword.strip()
         if keyword and keyword not in self.categories[category]:
             self.categories[category].append(keyword)
-            self.save_categories(category_file)
-            return True
+            return self.save_categories(category_file)
 
         return False
 

@@ -20,8 +20,9 @@ def load_csv_file(file):
 st.title("Compare Bank Statement Expenses by Category")
 
 # File uploaders for the two CSV files
-file1 = st.file_uploader("Upload First Bank Statement (CSV)", type=["csv"])
-file2 = st.file_uploader("Upload Second Bank Statement (CSV)", type=["csv"])
+col1, col2 = st.columns(2)
+file1 = col1.file_uploader("Upload First Bank Statement (CSV)", type=["csv"])
+file2 = col2.file_uploader("Upload Second Bank Statement (CSV)", type=["csv"])
 
 # Display the expense categories and their sums for both files
 if file1 is not None and file2 is not None:
