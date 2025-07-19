@@ -1,0 +1,6 @@
+services:
+  app:
+    image: simple_finance_tracker
+    ports:
+      - "8501:8501"
+    restart: always
