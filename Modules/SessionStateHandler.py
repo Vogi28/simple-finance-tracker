@@ -28,7 +28,7 @@ class SessionStateHandler:
 
         return False
 
-    def convert_Trans_date_str_to_date_obj(self) -> None:
+    def convert_trans_date_str_to_date_obj(self) -> None:
         for idx, row in self.debits_df.iterrows():
             date = datetime.strptime(
                 row["Transaction date"].lower().strip(), "%d.%m.%Y"

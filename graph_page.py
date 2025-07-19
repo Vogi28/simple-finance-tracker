@@ -1,10 +1,11 @@
-import Modules.method_helper as method_helper
+import calendar
 import os
+
 import plotly.express as px
 import streamlit as st
-from Modules.TransactionHandler import TransactionHandler as th
-import calendar
 
+import Modules.method_helper as method_helper
+from Modules.TransactionHandler import TransactionHandler as th
 
 CATEGORIES_FILE = os.getcwd() + "/categories.json"
 
@@ -23,6 +24,9 @@ if uploaded_files is not None:
     dfs = {}
     for uploaded_file in uploaded_files:
         df = tr_handler.load_transactions(uploaded_file, session_handler)
+        method_helper.load_new_categories_with_keywords(df, session_handler, CATEGORIES_FILE)
+        tr_handler.categorize_transactions(df, session_handler)
+
         [start_date, end_date] = method_helper.define_start_end_date(df)
         df_debits = df[df["Debit/Credit"] == "Debit"].copy()
 

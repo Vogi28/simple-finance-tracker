@@ -45,7 +45,7 @@ def main():
 
         df = tr_handler.load_transactions(uploaded_file or f, session_handler)
         # if categories file is new and empty, ask if user want to import the one from the statement
-        if len(session_handler.categories) <= 1 and st.session_state.not_import_default_category == False:
+        if len(session_handler.categories) <= 1 and not st.session_state.not_import_default_category:
             popup(df)
 
         if isinstance(df, str):
@@ -54,7 +54,7 @@ def main():
         if df is not None:
             [start_date, end_date] = method_helper.define_start_end_date(df)
             session_handler.set_debits_df(df[df["Debit/Credit"] == "Debit"].copy())
-            session_handler.convert_Trans_date_str_to_date_obj()
+            session_handler.convert_trans_date_str_to_date_obj()
 
             tab = st.tabs(["Expenses (Debits)"])
             with tab[0]:

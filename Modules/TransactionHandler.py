@@ -5,15 +5,15 @@ from Modules.SessionStateHandler import SessionStateHandler
 
 class TransactionHandler:
 
-    def load_transactions(_self, file, _handler: SessionStateHandler):
+    def load_transactions(self, file, _handler: SessionStateHandler):
         try:
             df = pd.read_csv(file)
             df.columns = [col.strip() for col in df.columns]
-            return _self.categorize_transactions(df, _handler)
+            return self.categorize_transactions(df, _handler)
         except Exception as e:
             return f"Error processing file: {str(e)}"
 
-    def categorize_transactions(_self, df: pd.DataFrame, _handler: SessionStateHandler):
+    def categorize_transactions(self, df: pd.DataFrame, _handler: SessionStateHandler):
         df["Category"] = "Uncategorized"
         for category, keywords in _handler.categories.items():
             if category == "Uncategorized" or not keywords:
@@ -31,7 +31,7 @@ class TransactionHandler:
         return df
 
     def merge_df(
-        _self, df1: pd.DataFrame, df2: pd.DataFrame, merge_on: str
+            self, df1: pd.DataFrame, df2: pd.DataFrame, merge_on: str
     ) -> pd.DataFrame:
         return pd.merge(
             df1,

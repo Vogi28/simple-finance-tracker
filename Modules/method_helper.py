@@ -8,6 +8,7 @@ import streamlit as st
 
 from Modules.SessionStateHandler import SessionStateHandler as ssh
 
+category_column: str|None = None
 
 @st.cache_data
 def define_start_end_date(df: pd.DataFrame):
@@ -113,6 +114,16 @@ def import_default_category(df: pd.DataFrame, session_handler, categories_file) 
     if not found_category_column:
         raise Exception("No default category column found")
 
+    add_category_with_keyword(categories_file, category_column, df, session_handler)
+
+def load_new_categories_with_keywords(df: pd.DataFrame, session_handler: ssh, categories_file: str) -> None:
+    if category_column is None:
+        import_default_category(df, session_handler, categories_file)
+
+    add_new_category(category_column, True, session_handler, categories_file, False)
+
+
+def add_category_with_keyword(categories_file, category_column, df, session_handler):
     for idx, row in df.iterrows():
         category = row[category_column].lower().strip()
         add_new_category(category, True, session_handler, categories_file, False)
