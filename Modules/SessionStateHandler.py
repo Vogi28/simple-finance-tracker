@@ -1,14 +1,14 @@
-from datetime import datetime
 import json
+from datetime import datetime
 
 
 class SessionStateHandler:
-    def __init__(self, categories: list) -> None:
+    def __init__(self, categories: dict) -> None:
         self.categories = categories
 
     def save_categories(
-        self,
-        categories_file: str,
+            self,
+            categories_file: str,
     ) -> bool:
         try:
             with open(categories_file, "w") as f:
@@ -19,7 +19,7 @@ class SessionStateHandler:
         return True
 
     def add_keyword_to_category(
-        self, category: str, keyword: str, category_file: str
+            self, category: str, keyword: str, category_file: str
     ) -> bool:
         keyword = keyword.strip()
         if keyword and keyword not in self.categories[category]:

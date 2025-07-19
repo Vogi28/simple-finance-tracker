@@ -1,7 +1,9 @@
-import Modules.method_helper as method_helper
 import os
+
 import plotly.express as px
 import streamlit as st
+
+import Modules.method_helper as method_helper
 from Modules.TransactionHandler import TransactionHandler as th
 
 CATEGORIES_FILE = os.getcwd() + "/categories.json"
@@ -14,6 +16,19 @@ st.set_page_config(
 )
 
 session_handler = method_helper.initialize_state(CATEGORIES_FILE)
+
+
+@st.dialog(title="Category list is empty. Import category from statement?", width="small")
+def popup(df) -> None:
+    no = st.button("No")
+    yes = st.button("Yes")
+    if yes:
+        with st.spinner("Importing category from statement"):
+            method_helper.import_default_category(df, session_handler, CATEGORIES_FILE)
+        st.rerun()
+    if no:
+        st.session_state.not_import_default_category = True
+        st.rerun()
 
 
 def main():
@@ -29,6 +44,9 @@ def main():
             method_helper.save_file_in_session(uploaded_file)
 
         df = tr_handler.load_transactions(uploaded_file or f, session_handler)
+        # if categories file is new and empty, ask if user want to import the one from the statement
+        if len(session_handler.categories) <= 1 and st.session_state.not_import_default_category == False:
+            popup(df)
 
         if isinstance(df, str):
             st.error(df)
@@ -88,15 +106,15 @@ def main():
                         for idx, row in edited_df.iterrows():
                             new_category = row["Category"]
                             if (
-                                new_category
-                                == session_handler.debits_df.at[idx, "Category"]
+                                    new_category
+                                    == session_handler.debits_df.at[idx, "Category"]
                             ):
                                 continue
 
                             description = row["Description"]
                             session_handler.debits_df.at[idx, "Category"] = new_category
                             if session_handler.add_keyword_to_category(
-                                new_category, description, CATEGORIES_FILE
+                                    new_category, description, CATEGORIES_FILE
                             ):
                                 st.success(f"Changes applied for {description}")
 
